@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" href="favicon.ico" type="image/x-icon">
+<title>Elastic One | Applied Machine Learning for Vision</title>
+<meta name="description" content="Elastic One — applied ML for vision. VRIn real-time depth, Graphene fluid UI and inference engine for edge.">
+<style>
+  :root {
+    --bg: #fafafa;
+    --bg-warm: #f5f3f0;
+    --card: #ffffff;
+    --text: #2a2a2a;
+    --text-s: #5a5a5a;
+    --text-m: #8a8a8a;
+    --accent: #2d5fa6;
+    --border: #e0ddd8;
+    --logo-filter: none;
+    --body-grad: linear-gradient(170deg, #e8e8f8 0%, #f5ebe0 28%, #dce4f5 55%, #eeded8 78%, #e8e8f8 100%);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #121216; --bg-warm: #18181e; --card: #1c1c24;
+      --text: #e0e0e8; --text-s: #a0a0b0; --text-m: #707080;
+      --accent: #5b8fd9; --border: #2a2a38;
+      --logo-filter: brightness(0) invert(1);
+      --body-grad: linear-gradient(170deg, #0e0e18 0%, #141220 30%, #10141e 60%, #16101a 85%, #0e0e18 100%);
+    }
+  }
+  [data-theme="dark"] {
+    --bg: #121216; --bg-warm: #18181e; --card: #1c1c24;
+    --text: #e0e0e8; --text-s: #a0a0b0; --text-m: #707080;
+    --accent: #5b8fd9; --border: #2a2a38;
+    --logo-filter: brightness(0) invert(1);
+    --body-grad: linear-gradient(170deg, #0e0e18 0%, #141220 30%, #10141e 60%, #16101a 85%, #0e0e18 100%);
+  }
+  [data-theme="light"] {
+    --bg: #fafafa; --bg-warm: #f5f3f0; --card: #ffffff;
+    --text: #2a2a2a; --text-s: #5a5a5a; --text-m: #8a8a8a;
+    --accent: #2d5fa6; --border: #e0ddd8;
+    --logo-filter: none;
+    --body-grad: linear-gradient(170deg, #e8e8f8 0%, #f5ebe0 28%, #dce4f5 55%, #eeded8 78%, #e8e8f8 100%);
+  }
+  .theme-toggle {
+    position: fixed; bottom: 1.2rem; right: 1.2rem; z-index: 100;
+    width: 34px; height: 34px; border: 1px solid var(--border); border-radius: 50%;
+    background: var(--card); cursor: pointer;
+    font-size: 16px; line-height: 32px; text-align: center;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+  }
+  .theme-toggle:hover { border-color: var(--accent); box-shadow: 0 2px 8px rgba(0,0,0,0.15); }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: Georgia, 'Times New Roman', serif;
+    background: var(--body-grad);
+    color: var(--text); line-height: 1.8;
+    min-height: 100vh;
+  }
+  h1, h2, h3, h4, nav, footer, .label, .aside-card li, .roadmap-card li, .caption {
+    font-family: 'Segoe UI', system-ui, sans-serif;
+  }
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+
+  nav {
+    max-width: 960px; margin: 0 auto; padding: 1.2rem 2rem;
+    display: flex; align-items: center; justify-content: space-between;
+    border-bottom: 1px solid var(--border); flex-wrap: wrap; gap: 0.4rem;
+  }
+  .nav-top { display: flex; flex-direction: column; gap: 0.1rem; }
+  .logo-group { display: flex; align-items: center; gap: 0.7rem; }
+  .logo-group img { height: 32px; filter: var(--logo-filter); }
+  .logo-group span { font-size: 1.05rem; font-weight: 600; color: var(--text); }
+  .tagline { font-size: 0.8rem; color: var(--text-m); font-family: 'Segoe UI', sans-serif; }
+  .nav-links a { color: var(--text-s); margin-left: 1.5rem; font-size: 0.9rem; }
+  .nav-links a:hover { color: var(--accent); text-decoration: none; }
+
+  section { max-width: 960px; margin: 0 auto; padding: 3.5rem 2rem; }
+  section + section { border-top: 1px solid var(--border); }
+  .label {
+    font-size: 0.75rem; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 2px; color: var(--text-m); margin-bottom: 0.5rem;
+  }
+  h2 { font-size: 1.8rem; font-weight: 700; margin-bottom: 0.4rem; }
+  .sub { color: var(--text-s); font-size: 1rem; margin-bottom: 1.8rem; }
+
+  .hero {
+    text-align: center; padding: 2.5rem 2rem 2rem; border-bottom: 1px solid var(--border);
+    background: linear-gradient(180deg, rgba(45,95,166,0.07) 0%, transparent 100%);
+  }
+  .hero img { height: 48px; margin-bottom: 0.8rem; filter: var(--logo-filter); }
+  .hero h1 { font-size: 1.25rem; font-weight: 600; margin-bottom: 0.4rem; }
+  .hero p { font-size: 0.95rem; color: var(--text-s); max-width: 500px; margin: 0 auto 1.2rem; }
+  .hero-links { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+  .hero-links a {
+    font-family: 'Segoe UI', sans-serif; font-size: 0.9rem;
+    padding: 0.5rem 1.2rem; border-radius: 4px;
+  }
+  .lk-p { background: var(--accent); color: #fff !important; }
+  .lk-p:hover { opacity: 0.85; text-decoration: none; }
+  .lk-s { border: 1px solid var(--border); color: var(--text-s) !important; }
+  .lk-s:hover { border-color: var(--accent); color: var(--accent) !important; text-decoration: none; }
+
+  .project-header { display: flex; align-items: center; gap: 1rem; margin-bottom: 0.5rem; }
+  .project-header img { height: 50px; filter: var(--logo-filter); }
+  .project-header h2 { margin-bottom: 0; }
+
+  .two-col { display: flex; gap: 2.5rem; align-items: flex-start; }
+  .col { flex: 1; }
+  .col-narrow { flex: 0 0 300px; }
+
+  .aside-card {
+    background: var(--bg-warm); border-radius: 8px; padding: 1.5rem;
+    border: 1px solid var(--border);
+  }
+  .aside-card h3 { font-size: 0.95rem; font-weight: 700; margin-bottom: 0.6rem; }
+  .aside-card ul { list-style: disc; padding-left: 1.2rem; }
+  .aside-card li { font-size: 0.9rem; margin-bottom: 0.3rem; color: var(--text-s); }
+
+  .pillars { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.2rem; margin-top: 1.5rem; }
+  .pcard {
+    background: var(--card); border: 1px solid var(--border); border-radius: 8px;
+    padding: 1.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+    transition: box-shadow 0.2s;
+  }
+  .pcard:hover { box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+  .pcard h3 { font-size: 1rem; font-weight: 700; margin-bottom: 0.4rem; }
+  .pcard p { font-size: 0.95rem; color: var(--text-s); }
+
+  .screenshots {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-top: 2rem;
+  }
+  .screenshots figure { margin: 0; }
+  .screenshots img {
+    width: 100%; border-radius: 8px; border: 1px solid var(--border);
+  }
+  .caption { font-size: 0.8rem; color: var(--text-m); margin-top: 0.4rem; text-align: center; }
+
+  .step-tabs { display: flex; gap: 0.5rem; margin-top: 2rem; margin-bottom: 1rem; }
+  .step-tab {
+    font-family: 'Segoe UI', sans-serif; font-size: 0.85rem; font-weight: 600;
+    padding: 0.45rem 1rem; border-radius: 4px; border: 1px solid var(--border);
+    background: var(--card); color: var(--text-s); cursor: pointer; transition: all 0.15s;
+  }
+  .step-tab:hover { border-color: var(--accent); color: var(--accent); }
+  .step-tab.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+  .step-pair { display: none; gap: 1.5rem; align-items: stretch; }
+  .step-pair.active { display: flex; }
+  .demo-panel { display: none; margin-top: 1rem; }
+  .demo-panel.active { display: block; }
+  .demo-panel picture { display: block; }
+  .demo-panel img {
+    width: 100%; border-radius: 8px; border: 1px solid var(--border);
+  }
+  .step-code {
+    flex: 1; min-width: 0; background: #1e1e2e; border-radius: 8px; padding: 1.2rem;
+    border: 1px solid #2a2a3e;
+  }
+  .step-code code {
+    font-family: 'Consolas', 'Monaco', monospace; font-size: 0.78rem;
+    line-height: 1.7; color: #cdd6f4; white-space: pre; display: block;
+  }
+  .step-code .kw { color: #cba6f7; }
+  .step-code .str { color: #a6e3a1; }
+  .step-code .num { color: #fab387; }
+  .step-code .cmt { color: #585b70; }
+  .step-code .op { color: #f9e2af; }
+  .step-img {
+    flex: 1; min-width: 0; border-radius: 8px; border: 1px solid var(--border);
+    overflow: hidden; background: #0a0b1c; display: flex; align-items: center;
+  }
+  .step-img img { width: 100%; display: block; }
+  @media (max-width: 700px) {
+    .step-pair.active { flex-direction: column; }
+  }
+
+  .video-wrap {
+    max-width: 640px; margin: 1.5rem auto 0; border-radius: 8px; overflow: hidden;
+    border: 1px solid var(--border); aspect-ratio: 16/9;
+  }
+  .video-wrap iframe { width: 100%; height: 100%; border: none; }
+
+  .roadmap { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.2rem; }
+  .roadmap-card {
+    background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 1.5rem;
+  }
+  .roadmap-card .phase {
+    font-size: 0.75rem; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 2px; color: var(--text-m); margin-bottom: 0.3rem;
+  }
+  .roadmap-card h3 { font-size: 1.1rem; margin-bottom: 0.6rem; }
+  .roadmap-card ul { list-style: disc; padding-left: 1.2rem; }
+  .roadmap-card li { font-size: 0.9rem; margin-bottom: 0.3rem; color: var(--text-s); }
+
+  footer {
+    max-width: 960px; margin: 0 auto; border-top: 1px solid var(--border);
+    padding: 2rem; text-align: center; color: var(--text-m); font-size: 0.85rem;
+    font-family: 'Segoe UI', sans-serif;
+  }
+  footer a { color: var(--text-s); }
+
+  @media (max-width: 700px) {
+    .two-col { flex-direction: column; }
+    .col-narrow { flex: 1; }
+    .screenshots { grid-template-columns: 1fr; }
+    nav { flex-direction: column; align-items: flex-start; gap: 0.5rem; }
+    .nav-links { margin-left: 0; }
+    .nav-links a { margin-left: 0; margin-right: 1.2rem; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-top">
+    <div class="logo-group">
+      <img src="e1.svg" alt="Elastic One">
+      <span>Elastic One</span>
+    </div>
+    <div class="tagline">Applied machine learning for vision</div>
+  </div>
+  <div class="nav-links">
+    <a href="#graphene">Graphene</a>
+    <a href="#vrin">VRIn</a>
+    <a href="#infer">Infer</a>
+    <a href="https://www.youtube.com/@evr174">YouTube</a>
+  </div>
+</nav>
+<button class="theme-toggle" onclick="toggleTheme()" title="Toggle dark mode" aria-label="Toggle dark mode" id="themeBtn"></button>
+
+<!-- Graphene -->
+<section id="graphene">
+  <div class="project-header">
+    <img src="graphene.svg" alt="Graphene">
+    <h2>Graphene</h2>
+  </div>
+  <p class="sub">Fluid UI and inference runtime for edge devices</p>
+
+  <p>
+    Instead of static screens, Graphene lets an LLM compose a full native interface
+    tailored to what the user actually needs. The model discovers what the device can
+    do, builds the UI piece by piece, and adapts it on the fly. Everything renders
+    and executes on the device itself.
+  </p>
+  <p style="color: var(--text-m); font-size: 0.95rem; margin-top: 1rem;">
+    Source: <a href="https://github.com/me-im-counting/graphene">github.com/me-im-counting/graphene</a> (private &mdash; <a href="mailto:contact@elasticone.net">contact for invite</a>)
+  </p>
+
+  <div class="step-tabs">
+    <button class="step-tab active" onclick="showDemo(0, true)">Depth Dashboard</button>
+    <button class="step-tab" onclick="showDemo(1, true)">Reaction Game</button>
+    <button class="step-tab" onclick="showDemo(2, true)">Showcase</button>
+  </div>
+
+  <div class="demo-panel active" data-demo="0">
+    <picture>
+      <source media="(max-width: 700px)" srcset="graphene_dashboard_m.gif">
+      <img src="graphene_dashboard.gif" alt="LLM builds a depth estimation dashboard">
+    </picture>
+    <p class="caption">LLM discovers operators, builds a dashboard from "build me a depth estimation tool", then adapts it by adding a file browser on request.</p>
+  </div>
+  <div class="demo-panel" data-demo="1">
+    <picture>
+      <source media="(max-width: 700px)" srcset="graphene_game_m.gif">
+      <img src="graphene_game.gif" alt="LLM builds a reaction game">
+    </picture>
+    <p class="caption">LLM creates a reaction game with moving targets. Registers IPC triggers on button clicks, reacts to events, updates score in real time.</p>
+  </div>
+  <div class="demo-panel" data-demo="2">
+    <picture>
+      <source media="(max-width: 700px)" srcset="graphene_showcase_m.gif">
+      <img src="graphene_showcase.gif" alt="Three apps built live">
+    </picture>
+    <p class="caption">Three different apps &mdash; System Monitor, Color Picker, Task Manager &mdash; built back-to-back on the same runtime from different user prompts.</p>
+  </div>
+
+  <script>
+  var _demoTimer;
+  function showDemo(n, manual) {
+    document.querySelectorAll('.step-tab').forEach(function(t, i) {
+      t.classList.toggle('active', i === n);
+    });
+    document.querySelectorAll('.demo-panel').forEach(function(p, i) {
+      p.classList.toggle('active', i === n);
+    });
+    window._currentDemo = n;
+    if (manual) { clearInterval(_demoTimer); }
+  }
+  window._currentDemo = 0;
+  </script>
+
+  <div class="pillars">
+    <div class="pcard">
+      <h3>No templates</h3>
+      <p>
+        The model picks from buttons, lists, sliders, image views &mdash;
+        whatever makes sense &mdash; and assembles the interface itself.
+        Every app looks different because every request is different.
+      </p>
+    </div>
+    <div class="pcard">
+      <h3>Closed loop</h3>
+      <p>
+        The model can query what operators exist on the device, read back
+        any value it set, and register triggers that fire when the user
+        interacts. It works with what's actually there.
+      </p>
+    </div>
+    <div class="pcard">
+      <h3>Runs locally</h3>
+      <p>
+        The UI renders and inference runs on the device itself.
+        DirectX 11, OpenCL, CPU. No server needed for the interface
+        or the compute.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- VRIn -->
+<section id="vrin">
+  <div class="project-header">
+    <img src="vrin.png" alt="VRIn">
+    <h2>VRIn</h2>
+  </div>
+  <p class="sub">Real-time 2D to 3D video conversion for VR</p>
+
+  <p>
+    VRIn generates per-frame depth maps from flat video using MiDaS v2
+    and reconstructs 3D meshes for VR headset display.
+    Inference runs on a custom C++ engine using DirectCompute GPU shaders.
+  </p>
+
+  <div class="pillars" style="margin-top: 1.5rem; margin-bottom: 1.5rem;">
+    <div class="pcard">
+      <h3>Depth estimation</h3>
+      <p>MiDaS v2 real-time inference with automatic kernel fusing across CPU and DirectCompute GPU backends.</p>
+    </div>
+    <div class="pcard">
+      <h3>3D reconstruction</h3>
+      <p>Depth-to-vertex mesh generation with per-frame geometry. Integrated Unity VR player for headset display.</p>
+    </div>
+  </div>
+
+  <p style="color: var(--text-m); font-size: 0.95rem; margin-bottom: 1.5rem;">
+    <a href="https://github.com/me-im-counting/elasticone-docs/releases/tag/v1.0-vrin">Download prototype</a> &middot; <a href="https://me-im-counting.github.io/content_pop/">Try in browser</a> &middot; <a href="https://www.youtube.com/@evr174">youtube.com/@evr174</a>
+  </p>
+
+  <div class="video-wrap">
+    <iframe src="https://www.youtube-nocookie.com/embed/pDx4HkIID4Q?rel=0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowfullscreen loading="lazy"></iframe>
+  </div>
+</section>
+
+<!-- Infer -->
+<section id="infer">
+  <div class="project-header">
+    <img src="infer.png" alt="Infer">
+    <h2>Infer</h2>
+  </div>
+  <p class="sub">C++ inference engine powering both VRIn and Graphene</p>
+
+  <p>
+    Infer is the compute backend shared by both projects. 40+ neural network
+    operators running on CPU, DirectX 11, and OpenCL. ONNX model import via Python toolchain.
+  </p>
+  <p style="margin-top: 1rem;">
+    Originally built as a C++14 library for VRIn's MiDaS model, then rewritten to
+    C++17 header-only for Graphene with additional backends and operator coverage.
+  </p>
+</section>
+
+<!-- Roadmap -->
+<section id="roadmap">
+  <div class="label">Roadmap</div>
+  <div class="roadmap">
+    <div class="roadmap-card">
+      <div class="phase">Past</div>
+      <h3>VRIn</h3>
+      <ul>
+        <li>Custom C++ inference engine</li>
+        <li>MiDaS v2 real-time depth</li>
+        <li>DirectCompute GPU backend</li>
+        <li>Unity VR player</li>
+      </ul>
+    </div>
+    <div class="roadmap-card">
+      <div class="phase">Now</div>
+      <h3>Graphene</h3>
+      <ul>
+        <li>CPU + DX11 + OpenCL backends</li>
+        <li>Fluid UI system</li>
+        <li>ONNX model import</li>
+        <li>Scripting engine</li>
+      </ul>
+    </div>
+    <div class="roadmap-card">
+      <div class="phase">Future</div>
+      <h3>CUDA &amp; edge</h3>
+      <ul>
+        <li>CUDA backend</li>
+        <li>TensorRT integration</li>
+        <li>Jetson deployment</li>
+        <li>LLM-driven script generation</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p><strong>Elastic One</strong></p>
+  <p style="margin-top: 0.4rem;">
+    <a href="mailto:contact@elasticone.net">contact@elasticone.net</a>
+    &nbsp;&middot;&nbsp;
+    <a href="https://www.youtube.com/@evr174">YouTube</a>
+  </p>
+  <p style="margin-top: 0.8rem; color: var(--text-m);">&copy; 2026 Elastic One</p>
+</footer>
+
+<script>
+function isDark() {
+  var t = document.documentElement.getAttribute('data-theme');
+  if (t) return t === 'dark';
+  return window.matchMedia('(prefers-color-scheme: dark)').matches;
+}
+function updateIcon() {
+  document.getElementById('themeBtn').textContent = isDark() ? '\u2600' : '\u263E';
+}
+function toggleTheme() {
+  var next = isDark() ? 'light' : 'dark';
+  document.documentElement.setAttribute('data-theme', next);
+  localStorage.setItem('theme', next);
+  updateIcon();
+}
+(function() {
+  var saved = localStorage.getItem('theme');
+  if (saved) document.documentElement.setAttribute('data-theme', saved);
+  updateIcon();
+})();
+</script>
+
+</body>
+</html>

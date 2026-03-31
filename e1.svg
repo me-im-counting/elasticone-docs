@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg viewBox="0 0 500 500" xmlns="http://www.w3.org/2000/svg" xmlns:bx="https://boxy-svg.com">
+  <defs>
+    <bx:grid x="0" y="0" width="10" height="10"/>
+  </defs>
+  <g transform="matrix(0.730163, -0.730163, 0.696156, 0.696156, -71.982361, 293.520569)" style="">
+    <path style="stroke: rgb(0, 0, 0);" d="M 110 40 H 290 V 120 H 90 V 60 A 20 20 0 0 1 110 40 Z" bx:shape="rect 90 40 200 80 20 0 0 0 1@38093350"/>
+    <path style="stroke: rgb(0, 0, 0);" d="M -290 -359.998 H -110 A 20 20 0 0 1 -90 -339.998 V -279.998 H -290 V -359.998 Z" transform="matrix(-1, 0, 0, -1, 0, 0)" bx:shape="rect -290 -359.998 200 80 0 20 0 0 1@7d775896"/>
+    <rect style="stroke: rgb(0, 0, 0);" transform="matrix(-1, 0, 0, -1, 0, 0)" x="-220" y="-239.998" width="130" height="80"/>
+    <path style="stroke: rgb(0, 0, 0);" transform="matrix(0, 1, -1, 0, 769.999939, -663.992981)" d="M 723.994 360 H 1003.992 A 20 20 0 0 1 1023.992 380 V 440 H 703.994 V 380 A 20 20 0 0 1 723.994 360 Z" bx:shape="rect 703.994 360 319.998 80 20 20 0 0 1@826c1efc"/>
+  </g>
+</svg>
